@@ -1,3 +1,5 @@
+[English](README.md) | [中文](README.zh-CN.md)
+
 # obsidian-multivault-git-sync
 produced by ChatGPT
 
