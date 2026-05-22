@@ -3,33 +3,26 @@ produced by ChatGPT
 
 # MultiVault Git Sync
 
-一个面向 Obsidian 的保守型 Git 同步插件。
+A conservative Git synchronization plugin for Obsidian.
 
-适用于：
+Designed for:
 
-```text id="14m4s5"
-一个 Git repository
-↳ 管理多个 Obsidian Vault
-↳ 多设备同步
-↳ 手动 / 半自动同步
+```text
+One Git repository
+↳ Multiple independent Obsidian vaults
+↳ Multiple devices
+↳ Manual / semi-automatic synchronization
 ```
 
 ---
 
-# 1. 插件用途
+# 1. Plugin Purpose
 
-该插件用于解决：
+This plugin was created to solve several practical problems encountered when synchronizing multiple Obsidian vaults across multiple devices through GitHub.
 
-```text id="c0bh7p"
-多个 Obsidian Vault
-共享同一个 Git 仓库
-```
+Typical structure:
 
-时产生的一系列同步问题。
-
-典型结构：
-
-```text id="3pgmwb"
+```text
 Obsidian library/
 ├── My notebook/
 ├── My blog/
@@ -38,37 +31,36 @@ Obsidian library/
 └── .git/
 ```
 
-其中：
+Each subdirectory is an independent Obsidian vault.
 
-* 每个子目录是独立 Vault
-* 整个目录由一个 Git 仓库管理
+The entire directory is managed by a single Git repository.
 
-插件提供：
+The plugin provides:
 
-* 多 Vault Git 同步
-* Repository 级锁机制
-* 保守型冲突处理
-* 大文件保护
-* 多设备同步支持
+* Cross-vault Git synchronization
+* Repository-level locking
+* Conservative conflict handling
+* Large-file protection
+* Multi-device synchronization support
 
 ---
 
-# 2. 适用环境
+# 2. Applicable Environment
 
-推荐环境：
+Recommended environment:
 
-| 组件            | 推荐                       |
-| ------------- | ------------------------ |
-| 系统            | Windows 10 / 11          |
-| Obsidian      | Desktop 版本               |
-| Git           | 已安装并加入 PATH              |
-| GitHub        | HTTPS 仓库                 |
-| Repository 类型 | 一个 repository 管理多个 vault |
-| 同步方式          | 手动同步优先                   |
+| Component       | Recommendation                            |
+| --------------- | ----------------------------------------- |
+| OS              | Windows 10 / 11                           |
+| Obsidian        | Desktop version                           |
+| Git             | Installed and available in PATH           |
+| GitHub          | HTTPS repository                          |
+| Repository type | One repository containing multiple vaults |
+| Sync style      | Manual sync preferred                     |
 
-推荐目录结构：
+Recommended structure:
 
-```text id="wvm7fa"
+```text
 F:\Obsidian library\
 ├── VaultA\
 ├── VaultB\
@@ -76,168 +68,157 @@ F:\Obsidian library\
 └── .git\
 ```
 
-不同设备：
+Different devices do NOT need identical paths.
 
-```text id="5vkquq"
-不要求相同盘符
-不要求相同绝对路径
-```
+Example:
 
-例如：
-
-```text id="v5yrjn"
-设备 A:
+```text
+PC A:
 F:\Obsidian library\
 
-设备 B:
+PC B:
 E:\Obsidian library\
 ```
 
-完全支持。
+is fully supported.
 
 ---
 
-# 3. 与 Obsidian Git 插件的区别
+# 3. Difference from Obsidian Git Plugin
 
-## Obsidian Git
+## Obsidian Git Plugin
 
-默认设计：
+Typical assumptions:
 
-```text id="jlwm4z"
-一个 Vault
-↳ 一个 Git Repository
+```text
+One vault
+↳ One Git repository
 ```
 
-特点：
+Characteristics:
 
-* 自动化程度较高
-* 自动 pull / push
-* 面向单 Vault 使用
-* 插件设置随 Vault 同步
-* 对多 Vault repository 支持较弱
+* Strong automation
+* Aggressive auto-pull / auto-push
+* Optimized for single-vault usage
+* Plugin configuration synchronized through vault
+* Limited multi-vault repository support
 
-在多 Vault repository 中容易出现：
+Potential problems in multi-vault repository usage:
 
-* 多 Vault 同时执行 Git
-* index.lock 冲突
-* 插件设置同步冲突
-* workspace.json 冲突
-* rebase 中断
-* 插件自同步冲突
+* Multiple vaults simultaneously running Git operations
+* index.lock conflicts
+* Plugin configuration synchronization conflicts
+* workspace.json conflicts
+* Rebase interruptions
+* Plugin self-update conflicts
 
 ---
 
 ## MultiVault Git Sync
 
-默认设计：
+Design assumptions:
 
-```text id="jlwm6n"
-一个 Repository
-↳ 多个 Vault
-↳ 多个设备
+```text
+One repository
+↳ Multiple vaults
+↳ Multiple devices
 ```
 
-特点：
+Characteristics:
 
-* 保守型同步策略
-* Repository 级锁
-* 手动同步优先
-* Rebase 状态检测
-* 大文件检测
-* Pull 前本地备份
-* Stop-on-conflict 策略
+* Conservative synchronization strategy
+* Repository-level lock
+* Manual-first workflow
+* Rebase-state detection
+* Large-file detection
+* Local-change backup before pull
+* Conflict-stop strategy
 
-插件刻意避免：
+The plugin intentionally avoids:
 
-* 自动 Markdown merge
-* 自动冲突覆盖
-* 完全无人值守后台同步
+* Automatic Markdown merge
+* Automatic conflict overwrite
+* Fully autonomous background synchronization
 
 ---
 
-# 4. 插件版本
+# 4. Version History
 
 ## v0.1.x
 
-初始版本。
+Initial implementation.
 
-功能：
+Functions:
 
-* 多 Vault repository 同步
-* Repository 锁机制
-* pull / commit / push 流程
-* 启动同步
-* 定时同步
+* Multi-vault repository synchronization
+* Repository lock mechanism
+* Basic pull / commit / push flow
+* Startup sync
+* Interval sync
 
-实际使用中发现的问题：
+Problems discovered during practical usage:
 
-* 插件自身冲突
-* workspace.json 冲突
-* rebase 中断
-* conflict backup 被 Git 跟踪
-* 大 PDF 上传失败
-* 多设备插件设置冲突
+* Plugin self-conflicts
+* workspace.json conflicts
+* Interrupted rebases
+* Conflict backup directories entering Git history
+* Large PDF upload failures
+* Simultaneous multi-device plugin-setting conflicts
 
 ---
 
 ## v0.2.0
 
-稳定化版本。
+Stabilization version.
 
-新增：
-
----
+New features:
 
 ### 1. Conflict Backup
 
-pull 前：
+Before pull:
 
-```text id="jlwm2p"
-本地已修改文件
-→ 自动复制到:
+```text
+Modified local files
+→ copied into:
 .obsidian-git-conflicts/
 ```
 
-用于避免本地内容丢失。
+Used to prevent accidental local-content loss.
 
 ---
 
 ### 2. Rebase / Merge Detection
 
-插件检测：
+The plugin detects:
 
-```text id="jlwm8m"
+```text
 rebase-merge
 MERGE_HEAD
 CHERRY_PICK_HEAD
 ```
 
-若 repository 状态异常：
-
-```text id="jlwm9u"
-立即停止同步
-```
+Synchronization stops immediately if repository state is unsafe.
 
 ---
 
 ### 3. Large File Protection
 
-默认：
+Default thresholds:
 
-```text id="jlwm4o"
->50 MB → warning
->100 MB → 阻止同步
+```text
+>50 MB  → warning
+>100 MB → synchronization blocked
 ```
 
-适配 GitHub 文件限制。
+Designed for GitHub limitations.
 
 ---
 
 ### 4. Conflict Commands
 
-新增命令：
+Added commands:
 
-```text id="jlwm2z"
+```text
 Show Git conflict status
 Abort current Git rebase or merge
 Scan large files before Git commit
@@ -247,41 +228,41 @@ Scan large files before Git commit
 
 ### 5. Repository Lock
 
-全局锁文件：
+Global lock file:
 
-```text id="jlwm0v"
+```text
 .git/obsidian-multivault-sync.lock
 ```
 
-避免多个 Vault 同时同步。
+Prevents simultaneous synchronization from multiple vaults.
 
 ---
 
-# 5. 安装流程
+# 5. Installation
 
-## 5.1 安装 Git
+## 5.1 Install Git
 
-下载：
+Download:
 
 [Git for Windows](https://git-scm.com/download/win?utm_source=chatgpt.com)
 
-检查：
+Confirm:
 
-```powershell id="jlwm1m"
+```powershell
 git --version
 ```
 
 ---
 
-## 5.2 安装 GitHub CLI
+## 5.2 Install GitHub CLI
 
-下载：
+Download:
 
 [GitHub CLI](https://cli.github.com?utm_source=chatgpt.com)
 
-登录：
+Login:
 
-```powershell id="jlwm6x"
+```powershell
 gh auth login
 ```
 
@@ -289,48 +270,48 @@ gh auth login
 
 ## 5.3 Clone Repository
 
-例如：
+Example:
 
-```powershell id="jlwm5r"
+```powershell
 cd F:\
 git clone https://github.com/USERNAME/REPOSITORY.git "Obsidian library"
 ```
 
 ---
 
-## 5.4 安装插件
+## 5.4 Install Plugin
 
-将：
+Place:
 
-```text id="jlwm7w"
+```text
 main.js
 manifest.json
 ```
 
-放入：
+into:
 
-```text id="jlwm2j"
+```text
 Vault/.obsidian/plugins/multivault-git-sync/
 ```
 
-随后在 Obsidian 中启用插件。
+Enable plugin in Obsidian.
 
 ---
 
-# 6. Repository 配置
+# 6. Repository Configuration
 
-推荐 GitHub repository 设置：
+Recommended GitHub repository settings:
 
-| 设置         | 推荐      |
-| ---------- | ------- |
-| Visibility | Private |
-| License    | 初期可不设置  |
-| README     | 可选      |
-| .gitignore | 必须      |
+| Setting    | Recommendation |
+| ---------- | -------------- |
+| Visibility | Private        |
+| License    | None initially |
+| README     | Optional       |
+| .gitignore | Required       |
 
-推荐 `.gitignore`：
+Recommended `.gitignore`:
 
-```gitignore id="jlwm4k"
+```gitignore
 *.pdf
 
 .obsidian-git-conflicts/
@@ -343,203 +324,199 @@ Vault/.obsidian/plugins/multivault-git-sync/
 
 ---
 
-# 7. 插件配置
+# 7. Plugin Configuration
 
 ## Repository Root
 
-必须填写：
+Must point to:
 
-```text id="jlwm7m"
-包含 .git 的目录
+```text
+Directory containing .git
 ```
 
-例如：
+Example:
 
-```text id="jlwm1q"
+```text
 F:\Obsidian library
 ```
 
-而不是：
+NOT:
 
-```text id="jlwm6r"
+```text
 F:\Obsidian library\My notebook
 ```
 
 ---
 
-## 推荐同步设置
+## Recommended Sync Settings
 
-只建议：
+Only ONE vault should enable automatic synchronization.
 
-```text id="jlwm9r"
-一个 Vault
-开启自动同步
-```
+Recommended:
 
-推荐：
+| Setting            | Main Vault | Other Vaults |
+| ------------------ | ---------- | ------------ |
+| Sync on startup    | ON         | OFF          |
+| Auto sync interval | 5~10 min   | 0            |
 
-| 设置                 | 主 Vault | 其他 Vault |
-| ------------------ | ------- | -------- |
-| Sync on startup    | ON      | OFF      |
-| Auto sync interval | 5~10 分钟 | 0        |
-
-避免 Repository 锁竞争。
+This prevents repository-lock contention.
 
 ---
 
-# 8. 推荐同步流程
+# 8. Synchronization Workflow
 
-## 设备 A
+Recommended workflow:
 
-```text id="jlwm8w"
-打开 Vault
+## Device A
+
+```text
+Open vault
 → Sync repository now
-→ 编辑
+→ Edit
 → Sync repository now
 ```
 
 ---
 
-## 设备 B
+## Device B
 
-```text id="jlwm2u"
-打开 Vault
+```text
+Open vault
 → Sync repository now
-→ 编辑
+→ Edit
 → Sync repository now
 ```
 
-避免：
+Avoid:
 
-```text id="jlwm3k"
-两个设备同时编辑同一文件
+```text
+Two devices editing same file simultaneously
 ```
 
 ---
 
-# 9. 冲突处理
+# 9. Conflict Handling
 
-插件采用：
+The plugin intentionally uses:
 
-```text id="jlwm0j"
+```text
 Stop-on-conflict
 ```
 
-而不是自动 merge。
+instead of automatic merge.
 
-发生冲突时：
+If conflicts occur:
 
-```text id="jlwm7x"
-同步立即停止
+```text
+Synchronization stops immediately
 ```
 
-本地内容仍可从：
+Local changes remain recoverable through:
 
-```text id="jlwm5m"
+```text
 .obsidian-git-conflicts/
 ```
 
-恢复。
-
 ---
 
-## 常见冲突类型
+## Common Conflict Types
 
-### 1. 同文件同时修改
+### 1. Same file modified on two devices
 
-例如：
+Example:
 
-```text id="jlwm4m"
+```text
 a.md
 ```
 
-在两个设备同时修改。
+modified simultaneously.
 
-Git 会产生 conflict。
+Git conflict occurs.
 
-需人工处理。
+Manual resolution required.
 
 ---
 
 ### 2. modify/delete conflict
 
-例如：
+Example:
 
-```text id="jlwm3d"
-设备 A:
-删除 a.md
+```text
+Device A:
+delete a.md
 
-设备 B:
-修改 a.md
+Device B:
+modify a.md
 ```
 
-Git 要求人工决定。
+Git requires manual decision.
 
 ---
 
-### 3. 插件设置冲突
+### 3. Plugin configuration conflicts
 
-通过忽略：
+Solved by excluding:
 
-```text id="jlwm1u"
+```text
 multivault-git-sync/data.json
 ```
 
-解决。
+from synchronization.
 
 ---
 
-# 10. 大文件建议
+# 10. Large File Recommendations
 
-GitHub 不适合作为大型教材 / 数据集仓库。
+GitHub is not suitable for large textbook / dataset repositories.
 
-推荐：
+Recommended:
 
-| 内容       | 推荐                      |
-| -------- | ----------------------- |
-| Markdown | GitHub                  |
-| 小图片      | GitHub                  |
-| PDF      | OneDrive / NAS / Zotero |
-| 大数据      | 外部存储                    |
+| Content        | Recommendation          |
+| -------------- | ----------------------- |
+| Markdown       | GitHub                  |
+| Small images   | GitHub                  |
+| PDFs           | OneDrive / NAS / Zotero |
+| Large datasets | External storage        |
 
-避免同步：
+Avoid synchronizing:
 
-```text id="jlwm6u"
+```text
 100MB+
 ```
 
-文件。
+files through GitHub.
 
 ---
 
-# 11. 当前限制
+# 11. Current Limitations
 
-尚未实现：
+Not yet implemented:
 
-* 自动 Markdown merge
-* 可视化 diff UI
-* 自动 conflict-copy
-* Vault 级选择同步
-* Git LFS 集成
-* 移动端支持
+* Automatic Markdown merge
+* Visual diff UI
+* Automatic conflict-copy generation
+* Vault-level selective synchronization
+* Git LFS integration
+* Mobile support
 
 ---
 
-# 12. 推荐使用哲学
+# 12. Recommended Usage Philosophy
 
-插件优先考虑：
+This plugin prioritizes:
 
-```text id="jlwm9m"
-Repository 安全性
-高于
-最大自动化
+```text
+Repository safety
+over
+Maximum automation
 ```
 
-同步应当：
+Synchronization should remain:
 
-* 可观察
-* 可中断
-* 可恢复
-* 可人工控制
+* Explicit
+* Observable
+* Interruptible
+* Recoverable
 
-而不是完全无人值守。
+rather than fully autonomous.
+
